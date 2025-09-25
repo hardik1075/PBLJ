@@ -1,0 +1,49 @@
+import java.io.*;
+
+public class StudentSerialization {
+
+   
+    static class Student implements Serializable {
+        private static final long serialVersionUID = 1L;
+        private int studentID;
+        private String name;
+        private double grade;
+
+        public Student(int studentID, String name, double grade) {
+            this.studentID = studentID;
+            this.name = name;
+            this.grade = grade;
+        }
+
+        @Override
+        public String toString() {
+            return "Student ID: " + studentID + ", Name: " + name + ", Grade: " + grade;
+        }
+    }
+
+    public static void main(String[] args) {
+        Student s1 = new Student(101, "Alice", 8.7);
+
+        try {
+            // Serialize to memory
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            ObjectOutputStream oos = new ObjectOutputStream(baos);
+            oos.writeObject(s1);
+            oos.close();
+
+            System.out.println("✅ Student object serialized (in memory) successfully!");
+
+            
+            ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
+            ObjectInputStream ois = new ObjectInputStream(bais);
+            Student s2 = (Student) ois.readObject();
+            ois.close();
+
+            System.out.println("\n✅ Deserialized Student Object:");
+            System.out.println(s2);
+
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+}
